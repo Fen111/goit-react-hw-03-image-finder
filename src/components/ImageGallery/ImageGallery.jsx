@@ -1,13 +1,17 @@
-// import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
+import PropTypes from 'prop-types';
 
-export default function ImageGallery({ images }) {
+import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
+import s from './ImageGallery.module.css';
+
+export default function ImageGallery({ images, onClick }) {
   return (
-    <ul class="gallery">
-      {/* {images.map(({ id, srcSmallImage, srcBigImage }) => (
-        <li key={id}>
-          <img src={srcSmallImage} alt="" />
-        </li>
-      ))} */}
+    <ul className={s.ImageGallery}>
+      {images.map(image => ImageGalleryItem(image, onClick))}
     </ul>
   );
 }
+
+ImageGallery.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.object),
+  onClick: PropTypes.func.isRequired,
+};

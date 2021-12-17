@@ -1,7 +1,26 @@
-export default function ImageGalleryItem() {
+import PropTypes from 'prop-types';
+import s from './ImageGalleryItem.module.css';
+
+export default function ImageGalleryItem(
+  { id, webformatURL, largeImageURL, tags },
+  onClick,
+) {
   return (
-    <li class="gallery-item">
-      <img src="" alt="" />
+    <li div className={s.ImageGalleryItem} key={id}>
+      <img
+        src={webformatURL}
+        alt={tags}
+        data-img={largeImageURL}
+        onClick={onClick}
+      />
     </li>
   );
 }
+
+ImageGalleryItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  webformatURL: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};

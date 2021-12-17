@@ -1,44 +1,99 @@
-// 23914400-19c57926caa45a402450638cc
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import React, { Component } from 'react';
-// import Loader from 'react-loader-spinner';
+import imagesApi from 'resourses/imagesApi';
+import s from './App.module.css';
 
 import Searchbar from 'components/Searchbar/Searchbar';
 import ImageGallery from 'components/ImageGallery/ImageGallery';
-// import Button from 'components/Button/Button';
+import Button from 'components/Button/Button';
 import Modal from 'components/Modal/Modal';
+import LoaderContainer from 'components/Container/LoaderContainer';
 
 export default class App extends Component {
   state = {
-    arrImage: null,
+    arrImages: [],
     searchImage: '',
+    currentPage: 1,
+    showModal: false,
+    largeImageURL: '',
+    imageAlt: '',
+    isLoading: false,
   };
 
-  //   componentDidMount() {
-  //     const key = '23914400-19c57926caa45a402450638cc';
-  //     const page = 1;
-  //     const perPage = 12;
-  //     const category = this.state.searchImage;
-  //     fetch(
-  //       `https://pixabay.com/api/?q=${category}&page=${page}&key=${key}&image_type=photo&orientation=horizontal&per_page=${perPage}`,
-  //     ).then(res => res.json().then(arrImage => this.setState({ arrImage })));
-  //   }
+  componentDidUpdate(prevProps, prevState) {
+    const { searchImage } = this.state;
+    // this.setState({ isLoading: true });
+    if (prevState.searchImage !== searchImage) {
+      this.fetchImages();
+    }
+  }
+
+  fetchImages = () => {
+    const { searchImage, currentPage } = this.state;
+    imagesApi(searchImage, currentPage).then(images => {
+      if (images.length < 1) {
+        toast.error('Image not found');
+        return;
+      }
+      this.setState(prevState => ({
+        arrImages: [...prevState.arrImages, ...images],
+        currentPage: prevState.currentPage + 1,
+      }));
+      // .finally(() =>this.setState({ isLoading: false }))
+    });
+  };
 
   handleFormSubmit = searchImage => {
     this.setState({ searchImage });
   };
 
+  toogleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
+  onClickOpenModal = e => {
+    if (e.target.nodeName !== 'IMG') {
+      return;
+    }
+    e.preventDefault();
+
+    this.setState({
+      largeImageURL: e.target.dataset.img,
+      showModal: true,
+      imageAlt: e.target.alt,
+    });
+  };
+
   render() {
+    const { arrImages, showModal, largeImageURL, tags, isLoading } = this.state;
     return (
-      <div>
-        <Searchbar onSubmit={this.handleFormSubmit}>
-          {/* <Button /> */}
-        </Searchbar>
-        <ImageGallery
-          images={this.state.arrImage}
-          searchImage={this.state.searchImage}
+      <div className={s.App}>
+        <Searchbar onSubmit={this.handleFormSubmit} />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
         />
-        <Modal />
+
+        {isLoading && <LoaderContainer />}
+
+        <ImageGallery images={arrImages} onClick={this.onClickOpenModal} />
+        {arrImages.length > 0 && <Button onClick={this.fetchImages} />}
+
+        {showModal && (
+          <Modal onClose={this.toogleModal}>
+            <img src={largeImageURL} alt={tags} />
+          </Modal>
+        )}
       </div>
     );
   }
