@@ -8,6 +8,7 @@ export default function ImageGalleryItem(
   return (
     <li div className={s.ImageGalleryItem} key={id}>
       <img
+        className={s.ImageGalleryItemImage}
         src={webformatURL}
         alt={tags}
         data-img={largeImageURL}

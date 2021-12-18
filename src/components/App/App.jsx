@@ -4,11 +4,11 @@ import React, { Component } from 'react';
 import imagesApi from 'resourses/imagesApi';
 import s from './App.module.css';
 
-import Searchbar from 'components/Searchbar/Searchbar';
-import ImageGallery from 'components/ImageGallery/ImageGallery';
-import Button from 'components/Button/Button';
-import Modal from 'components/Modal/Modal';
-import LoaderContainer from 'components/Container/LoaderContainer';
+import Searchbar from 'components/Searchbar';
+import ImageGallery from 'components/ImageGallery';
+import Button from 'components/Button';
+import Modal from 'components/Modal';
+import LoaderContainer from 'components/LoaderContainer';
 
 export default class App extends Component {
   state = {
