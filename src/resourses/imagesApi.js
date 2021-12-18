@@ -13,14 +13,10 @@ export default async function fetchImage(searchImage, currentPage) {
     `?q=${category}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${perPage}`;
 
   const res = await axios.get(url);
-  console.log(res);
   const data = await res.data;
-  console.log(data);
   const galleryImg = await data.hits;
-
   if (galleryImg.length === 0) {
     console.log('Image not found');
   }
-  console.log(galleryImg);
   return galleryImg;
 }

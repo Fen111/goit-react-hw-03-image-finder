@@ -13,7 +13,7 @@ import LoaderContainer from 'components/LoaderContainer';
 export default class App extends Component {
   state = {
     arrImages: [],
-    searchImage: '',
+    searchImage: null,
     currentPage: 1,
     showModal: false,
     largeImageURL: '',
@@ -23,29 +23,31 @@ export default class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { searchImage } = this.state;
-    // this.setState({ isLoading: true });
-    if (prevState.searchImage !== searchImage) {
-      this.fetchImages();
-    }
+
+    if (prevState.searchImage !== searchImage) this.fetchImages();
   }
 
   fetchImages = () => {
     const { searchImage, currentPage } = this.state;
+    this.setState({ isLoading: true });
     imagesApi(searchImage, currentPage).then(images => {
       if (images.length < 1) {
         toast.error('Image not found');
         return;
       }
-      this.setState(prevState => ({
-        arrImages: [...prevState.arrImages, ...images],
-        currentPage: prevState.currentPage + 1,
+      this.setState(({ arrImages, currentPage, isLoading }) => ({
+        arrImages: [...arrImages, ...images],
+        currentPage: currentPage + 1,
+        isLoading: !isLoading,
       }));
-      // .finally(() =>this.setState({ isLoading: false }))
     });
   };
 
   handleFormSubmit = searchImage => {
-    this.setState({ searchImage });
+    this.setState({
+      arrImages: [],
+      searchImage,
+    });
   };
 
   toogleModal = () => {
@@ -84,9 +86,8 @@ export default class App extends Component {
           pauseOnHover
         />
 
-        {isLoading && <LoaderContainer />}
-
         <ImageGallery images={arrImages} onClick={this.onClickOpenModal} />
+        {isLoading && <LoaderContainer />}
         {arrImages.length > 0 && <Button onClick={this.fetchImages} />}
 
         {showModal && (

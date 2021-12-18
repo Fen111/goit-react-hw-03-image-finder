@@ -6,8 +6,8 @@ export default function LoaderContainer() {
   return (
     <div className={s.loaderContainer}>
       <Loader
-        type="Bars"
-        color="#00BFFF"
+        type="ThreeDots"
+        color="red"
         height={100}
         width={100}
         timeout={1000}

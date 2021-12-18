@@ -1,4 +1,4 @@
-import { Component } from 'react/cjs/react.production.min';
+import { Component } from 'react';
 import { toast } from 'react-toastify';
 
 import s from './Searchbar.module.css';
@@ -14,13 +14,14 @@ export default class Searchbar extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    const { searchImage } = this.state;
 
-    if (this.state.searchImage.trim() === '') {
+    if (searchImage.trim() === '') {
       toast.error('Enter your search term');
       return;
     }
 
-    this.props.onSubmit(this.state.searchImage);
+    this.props.onSubmit(searchImage);
     this.setState({ searchImage: '' });
   };
 
@@ -29,7 +30,7 @@ export default class Searchbar extends Component {
       <header className={s.Searchbar}>
         <form className={s.SearchForm} onSubmit={this.handleSubmit}>
           <button type="submit" className={s.SearchFormButton}>
-            <span class="button-label"></span>
+            <span className={s.SearchFormButtonLabel}></span>
           </button>
 
           <input
