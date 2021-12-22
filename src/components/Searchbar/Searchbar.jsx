@@ -30,14 +30,14 @@ export default class Searchbar extends Component {
       <header className={s.Searchbar}>
         <form className={s.SearchForm} onSubmit={this.handleSubmit}>
           <button type="submit" className={s.SearchFormButton}>
-            <span className={s.SearchFormButtonLabel}></span>
+            <span className={s.SearchFormButtonLabel} />
           </button>
 
           <input
             className={s.SearchFormInput}
             type="text"
-            autocomplete="off"
-            autofocus
+            autoComplete="off"
+            autoFocus
             value={this.state.searchImage}
             placeholder="Search images and photos"
             onChange={this.handleImageSearch}

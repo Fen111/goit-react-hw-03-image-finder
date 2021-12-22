@@ -6,7 +6,7 @@ export default function ImageGalleryItem(
   onClick,
 ) {
   return (
-    <li div className={s.ImageGalleryItem} key={id}>
+    <li className={s.ImageGalleryItem} key={id}>
       <img
         className={s.ImageGalleryItemImage}
         src={webformatURL}

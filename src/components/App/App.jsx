@@ -1,7 +1,7 @@
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import React, { Component } from 'react';
-import imagesApi from 'resourses/imagesApi';
+import imagesApi from 'api/imagesApi';
 import s from './App.module.css';
 
 import Searchbar from 'components/Searchbar';
@@ -27,12 +27,14 @@ export default class App extends Component {
     if (prevState.searchImage !== searchImage) this.fetchImages();
   }
 
-  fetchImages = () => {
+  fetchImages = async () => {
     const { searchImage, currentPage } = this.state;
     this.setState({ isLoading: true });
-    imagesApi(searchImage, currentPage).then(images => {
+
+    try {
+      const images = await imagesApi(searchImage, currentPage);
       if (images.length < 1) {
-        toast.error('Image not found');
+        toast.error(`Image ${searchImage} not found`);
         return;
       }
       this.setState(({ arrImages, currentPage, isLoading }) => ({
@@ -40,7 +42,9 @@ export default class App extends Component {
         currentPage: currentPage + 1,
         isLoading: !isLoading,
       }));
-    });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   handleFormSubmit = searchImage => {
